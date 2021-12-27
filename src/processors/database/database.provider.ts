@@ -21,7 +21,7 @@ export const databaseProvider = [
         });
       };
 
-      const uri_cloud = `mongodb+srv://product_2021:product2021@products2021.nhqfm.mongodb.net/intranet?retryWrites=true&w=majority`;
+      const uri_cloud = `mongodb+srv://product_2021:product2021@products2021.nhqfm.mongodb.net/api?retryWrites=true&w=majority`;
 
       // Connect to the database
       const connection = async (): Promise<void> => {
