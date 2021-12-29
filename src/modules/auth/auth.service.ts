@@ -46,6 +46,16 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
+  async signOut(user: User) {
+    const userSignOut = await this.usersService.removeRefreshToken(user.id);
+    return { userSignOut };
+  }
+
+  async renewal(user: User) {
+    const accessToken = this.generateAccessToken(user.id);
+    return { accessToken };
+  }
+
   private generateAccessToken(id: string): string {
     const payload: IJwtPayload = { id };
 

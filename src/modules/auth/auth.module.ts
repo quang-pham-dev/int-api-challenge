@@ -7,11 +7,18 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtAccessTokenStrategy } from './jwt-access-token.strategy';
 import { JwtConfirmTokenStrategy } from './jwt-confirm-token.strategy';
+import { JwtRefreshTokenStrategy } from './jwt-refresh-token.strategy';
 import { LocalStrategy } from './local.strategy';
 
 @Module({
   imports: [ConfigModule, UsersModule, PassportModule, JwtModule.register({})],
-  providers: [AuthService, JwtConfirmTokenStrategy, JwtAccessTokenStrategy, LocalStrategy],
+  providers: [
+    AuthService,
+    JwtRefreshTokenStrategy,
+    JwtConfirmTokenStrategy,
+    JwtAccessTokenStrategy,
+    LocalStrategy,
+  ],
   exports: [AuthService],
   controllers: [AuthController],
 })

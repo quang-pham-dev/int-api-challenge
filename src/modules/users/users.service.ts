@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { hashPassword } from '@utils/hash.util';
+import { hashPassword, verifyPassword } from '@utils/hash.util';
 import { uuid_v4 } from '@utils/uuid.util';
 import { InjectModel } from 'nestjs-typegoose';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -35,7 +35,7 @@ export class UsersService {
   }
 
   async hashCurrentRefreshToken(refreshToken: string, id: string) {
-    const foundUser = this.findOneById(id);
+    const foundUser = await this.userModel.findOne({ id }).exec();
     try {
       if (!foundUser) {
         throw new NotFoundException('User with this id does not exist');
@@ -51,6 +51,38 @@ export class UsersService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async getUserIfRefreshTokenMatches(refreshToken: string, id: string) {
+    const foundUser = await this.userModel.findOne({ id }).exec();
+    if (!foundUser) {
+      throw new NotFoundException('User with this id does not exist');
+    }
+    try {
+      const isRefreshTokenMatching = await verifyPassword(
+        refreshToken,
+        foundUser.currentHashedRefreshToken,
+      );
+      if (isRefreshTokenMatching) {
+        return foundUser;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removeRefreshToken(id: string): Promise<User | any> {
+    const foundUser = await this.userModel.findOne({ id }).exec();
+    if (!foundUser) {
+      throw new NotFoundException('User with this id does not exist');
+    }
+
+    return await this.userModel.updateOne(
+      { id },
+      {
+        currentHashedRefreshToken: null,
+      },
+    );
   }
 
   async findOneByEmail(emailAddress: string): Promise<User> {

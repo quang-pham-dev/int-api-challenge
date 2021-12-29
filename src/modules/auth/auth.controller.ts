@@ -13,6 +13,7 @@ import EmailConfirmationDto from './dtos/emailConfirmation.dto';
 import { SignUpDto } from './dtos/signup.dto';
 import { JwtAccessTokenGuard } from './guards/jwt-access-token.guard';
 import { JwtConfirmTokenGuard } from './guards/jwt-confirm-token.guard';
+import { JwtRefreshTokenGuard } from './guards/jwt-refresh-token.guard';
 import { LocalAuthenticationGuard } from './guards/local-authentication.guard';
 import { RequestWithUser } from './interfaces/request-with-user.interface';
 
@@ -59,6 +60,24 @@ export class AuthController {
     // TODO: set current refresh token by user ID
     await this.authService.setCurrentRefreshToken(refreshToken, user.id);
     return { user, accessToken, refreshToken };
+  }
+
+  //   # Logout
+  @Post('signout')
+  @UseGuards(JwtAccessTokenGuard)
+  @HttpCode(200)
+  async logOut(@Req() request: RequestWithUser) {
+    await this.authService.signOut(request.user);
+  }
+
+  // # Refresh token
+  @Get('renewal')
+  @UseGuards(JwtRefreshTokenGuard)
+  async refresh(@Req() req: RequestWithUser) {
+    // const { user } = req;
+    const accessToken = await this.authService.renewal(req.user);
+
+    return accessToken;
   }
 
   // # Email confirmation
