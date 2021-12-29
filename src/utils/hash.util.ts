@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 
-export const generateHash = async (password: string): Promise<string> => {
+export const hashPassword = async (password: string): Promise<string> => {
   return await bcrypt.hash(password, 10);
 };
 
-export const validateHash = async (password: string, hash: string): Promise<boolean> => {
+export const verifyPassword = async (password: string, hash: string): Promise<boolean> => {
   if (!password || !hash) {
     return Promise.resolve(false);
   }

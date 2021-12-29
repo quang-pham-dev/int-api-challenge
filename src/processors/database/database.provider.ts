@@ -1,13 +1,12 @@
 import * as mongoose from 'mongoose';
 import { EmailService } from '@processors/helper/helper.service.email';
-import { DB_CONNECTION_TOKEN } from '@constants/system.constant';
 import * as APP_CONFIG from '@config/app.config';
 import logger from '@utils/logger';
 
 export const databaseProvider = [
   {
     inject: [EmailService],
-    provide: DB_CONNECTION_TOKEN,
+    provide: 'DbConnectionToken',
     useFactory: async (emailService: EmailService) => {
       let reconnectionTask = null;
       const RECONNECT_INTERVAL = 6000;
@@ -21,12 +20,10 @@ export const databaseProvider = [
         });
       };
 
-      const uri_cloud = `mongodb+srv://product_2021:product2021@products2021.nhqfm.mongodb.net/api?retryWrites=true&w=majority`;
-
       // Connect to the database
       const connection = async (): Promise<void> => {
         try {
-          await mongoose.connect(uri_cloud);
+          await mongoose.connect(process.env.DB_HOST);
         } catch (error) {
           console.info(error);
         }

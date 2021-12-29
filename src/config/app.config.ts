@@ -1,11 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const path = require('path');
 import { argv } from 'yargs';
 import * as Joi from '@hapi/joi';
-
-// const ROOT_PATH = path.join(__dirname, '..');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const packageJSON = require(path.resolve(ROOT_PATH, 'package.json'));
 
 export const APP = {
   PORT: 8000,
@@ -14,15 +8,6 @@ export const APP = {
   URL: 'https://application.com',
   //   ROOT_PATH,
   DEFAULT_CACHE_TTL: 60 * 60 * 24,
-};
-
-export const PROJECT = {
-  //   name: packageJSON.name,
-  //   version: packageJSON.version,
-  //   author: packageJSON.author,
-  //   site: APP.URL,
-  //   homepage: packageJSON.homepage,
-  //   issues: packageJSON.bugs.url,
 };
 
 export const CROSS_DOMAIN = {
@@ -55,10 +40,6 @@ export const EMAIL = {
   password: argv.EMAIL_PASSWORD || 'your email password',
   from: '"intranet" <intranet.com>',
   admin: 'intranet.com',
-};
-
-export const GOOGLE = {
-  //   serverAccountFilePath: path.resolve(ROOT_PATH, 'classified', 'google_service_account.json'),
 };
 
 export const VALIDATION_SCHEMA = {

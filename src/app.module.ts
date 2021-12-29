@@ -1,11 +1,13 @@
 import { VALIDATION_SCHEMA } from '@config/app.config';
+import { ArticleModule } from '@modules/article/article.module';
+import { AuthModule } from '@modules/auth/auth.module';
+import { UsersModule } from '@modules/users/users.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { CacheModule } from '@processors/cache/cache.module';
-import { DatabaseModule } from '@processors/database/database.module';
 import { HelperModule } from '@processors/helper/helper.module';
 import { CorsMiddleware } from 'middlewares/cors.middleware';
 import { OriginMiddleware } from 'middlewares/origin.middleware';
+import { TypegooseModule } from 'nestjs-typegoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
@@ -14,10 +16,13 @@ import { AppService } from './app.service';
     //#Redis Configuration
     //#Configuration
     ConfigModule.forRoot(VALIDATION_SCHEMA),
-    DatabaseModule,
+    TypegooseModule.forRoot(process.env.DB_HOST),
+    // DatabaseModule,
     HelperModule,
-    // CacheModule,
     //#Feature modules
+    AuthModule,
+    UsersModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

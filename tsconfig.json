@@ -23,6 +23,7 @@
       "@constants/*": ["constants/*"],
       "@interfaces/*": ["interfaces/*"],
       "@environments/*": ["environments/*"],
+      "@modules/*": ["modules/*"],
       "@errors/*": ["errors/*"],
       "@processors/*": ["processors/*"],
       "@transformers/*": ["transformers/*"],

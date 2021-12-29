@@ -1,25 +1,24 @@
 import { ConfigService } from '@nestjs/config';
 import { NestFactory, Reflector } from '@nestjs/core';
-import { ExpressAdapter, NestExpressApplication } from '@nestjs/platform-express';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import logger from '@utils/logger';
 import * as compression from 'compression';
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as rateLimit from 'express-rate-limit';
+import { HttpExceptionFilter } from 'filters/http.exception.filter';
 import * as helmet from 'helmet';
+import { LoggingInterceptor } from 'interceptors/logging.interceptor';
+import { TransformInterceptor } from 'interceptors/transform.interceptor';
+import { ValidationPipe } from 'pipes/validation.pipe';
 import 'reflect-metadata';
 import * as requestIp from 'request-ip';
-import { AppModule } from './app.module';
-import logger from '@utils/logger';
 import { bootstrapSwagger } from 'swagger';
-import { TransformInterceptor } from 'interceptors/transform.interceptor';
-import { ErrorInterceptor } from 'interceptors/error.interceptor';
-import { LoggingInterceptor } from 'interceptors/logging.interceptor';
-import { ValidationPipe } from 'pipes/validation.pipe';
-import { HttpExceptionFilter } from 'filters/error.filter';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, new ExpressAdapter(), {
-    logger: false,
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
   });
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('PORT') || 8081;
@@ -56,13 +55,13 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  app.useGlobalInterceptors(
-    new TransformInterceptor(new Reflector()),
-    new ErrorInterceptor(new Reflector()),
-    new LoggingInterceptor(),
-  );
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(
+    new TransformInterceptor(new Reflector()),
+    // new ErrorInterceptor(new Reflector()),
+    new LoggingInterceptor(),
+  );
 
   // #DocumentAPI
   bootstrapSwagger(app);

@@ -41,7 +41,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, HttpResponseS
     return call$.pipe(
       map((data: any) => {
         return {
-          result: usePaginate ? transformDataToPaginate<T>(data, request) : data,
+          data: usePaginate ? transformDataToPaginate<T>(data, request) : data,
           status: ResponseStatus.Success,
           message: message || TEXT.HTTP_DEFAULT_SUCCESS_TEXT,
         };

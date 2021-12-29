@@ -7,7 +7,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 export function bootstrapSwagger(app: INestApplication): void {
   const options = new DocumentBuilder()
-    .setTitle('Intranet API')
+    .setTitle('API')
     .setDescription('The API for intranet system')
     .setVersion('1.0')
     .addBearerAuth()
