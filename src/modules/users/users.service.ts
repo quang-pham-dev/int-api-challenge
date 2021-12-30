@@ -1,6 +1,6 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
-import { hashPassword, verifyPassword } from '@utils/hash.util';
+import * as bcrypt from 'bcrypt';
 import { uuid_v4 } from '@utils/uuid.util';
 import { InjectModel } from 'nestjs-typegoose';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -41,7 +41,7 @@ export class UsersService {
         throw new NotFoundException('User with this id does not exist');
       }
 
-      const currentHashedRefreshToken = await hashPassword(refreshToken);
+      const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
       return await this.userModel.updateOne(
         { id },
         {
@@ -59,7 +59,7 @@ export class UsersService {
       throw new NotFoundException('User with this id does not exist');
     }
     try {
-      const isRefreshTokenMatching = await verifyPassword(
+      const isRefreshTokenMatching = await bcrypt.compare(
         refreshToken,
         foundUser.currentHashedRefreshToken,
       );

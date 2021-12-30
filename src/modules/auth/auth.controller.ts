@@ -10,6 +10,8 @@ import {
 import { EmailService } from '@processors/helper/helper.service.email';
 import { AuthService } from './auth.service';
 import EmailConfirmationDto from './dtos/emailConfirmation.dto';
+import EmailResendDto from './dtos/emailResend.dto';
+import { LoginUserDto } from './dtos/loginUser.dto';
 import { SignUpDto } from './dtos/signup.dto';
 import { JwtAccessTokenGuard } from './guards/jwt-access-token.guard';
 import { JwtConfirmTokenGuard } from './guards/jwt-confirm-token.guard';
@@ -54,7 +56,7 @@ export class AuthController {
     type: User,
     description: 'User info with access token, refresh token',
   })
-  async signIn(@Req() req: RequestWithUser) {
+  async signIn(@Req() req: RequestWithUser, @Body() _signInDto: LoginUserDto) {
     const { user } = req;
     const { accessToken, refreshToken } = await this.authService.signIn(req.user);
     // TODO: set current refresh token by user ID
@@ -92,7 +94,10 @@ export class AuthController {
   @Post('confirm/resend')
   @UseGuards(JwtConfirmTokenGuard)
   @HttpCode(HttpStatus.OK)
-  async resendConfirmationLink(@Req() req: RequestWithUser) {
+  async resendConfirmationLink(
+    @Req() req: RequestWithUser,
+    @Body() _confirmResendDto: EmailResendDto,
+  ) {
     return await this.emailService.resendConfirmationLink(req.user.emailAddress);
   }
 

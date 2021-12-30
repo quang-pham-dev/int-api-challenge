@@ -1,4 +1,5 @@
 import { IBaseModel } from '@interfaces/base-model.interface';
+import { ApiProperty } from '@nestjs/swagger';
 import { DocumentType, modelOptions, prop, Ref, Severity } from '@typegoose/typegoose';
 import { IUserModel } from '../interfaces/users-model.interface';
 import { RoleType } from '../role-type.enum';
@@ -10,24 +11,31 @@ export class User implements IUserModel, IBaseModel {
   @prop({ unique: true })
   id: string;
 
+  @ApiProperty({ example: 'USER', description: 'role' })
   @prop({ default: RoleType.USER })
   role: Ref<RoleType>;
 
+  @ApiProperty({ example: 'william', description: 'First Name' })
   @prop({ required: true, trim: true })
   firstName: string;
 
+  @ApiProperty({ example: 'Pham', description: 'Last Name' })
   @prop({ trim: true })
   lastName: string;
 
+  @ApiProperty({ example: 'Male', description: 'sex of User' })
   @prop({ trim: true })
   sex: string;
 
+  @ApiProperty({ example: 'quangpn1@email', description: 'email address' })
   @prop({ required: true, trim: true })
   emailAddress: string;
 
+  @ApiProperty({ example: 'quangpn1@bac', description: 'password' })
   @prop({ required: true, trim: true })
   password: string;
 
+  @ApiProperty({ example: '+84961140590', description: 'Phone number' })
   @prop()
   phoneNumber: string;
 
