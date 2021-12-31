@@ -95,6 +95,7 @@ export class AuthController {
   @UseGuards(JwtConfirmTokenGuard)
   @HttpCode(HttpStatus.OK)
   async resendConfirmationLink(
+    // TODO implement getCurrentUser instead
     @Req() req: RequestWithUser,
     @Body() _confirmResendDto: EmailResendDto,
   ) {

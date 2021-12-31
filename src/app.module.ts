@@ -1,6 +1,7 @@
 import { VALIDATION_SCHEMA } from '@config/app.config';
 import { ArticleModule } from '@modules/article/article.module';
 import { AuthModule } from '@modules/auth/auth.module';
+import { SearchModule } from '@modules/search/search.module';
 import { UsersModule } from '@modules/users/users.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -23,6 +24,7 @@ import { AppService } from './app.service';
     AuthModule,
     UsersModule,
     ArticleModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
