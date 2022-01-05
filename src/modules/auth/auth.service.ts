@@ -97,11 +97,15 @@ export class AuthService {
     const user = await this.usersService.findOneByEmail(emailAddress);
     try {
       if (!user) {
-        throw new UnauthorizedException('Provided credentials are invalid!');
+        throw new UnauthorizedException(
+          `Provided credentials are invalid! please recheck email: ${emailAddress}, password: ${plainTextPassword}`,
+        );
       }
 
       if (!user.isEmailConfirmed) {
-        throw new UnauthorizedException('Pending account. Please verify your email.');
+        throw new UnauthorizedException(
+          `Pending account. Please verify your email: ${user.emailAddress}`,
+        );
       }
 
       await verifyPassword(plainTextPassword, user.password);

@@ -1,3 +1,4 @@
+import { RequestParams } from '@elastic/elasticsearch';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ElasticsearchService } from '@nestjs/elasticsearch';
@@ -33,13 +34,14 @@ export class SearchService {
     return { results, total: body.hits.total.value };
   }
 
+  async findIndex(params: RequestParams.Search) {
+    return this.elasticSearchService.search(params);
+  }
+
   // use to add
-  async index(index: string, data: any) {
+  async addIndex(params: RequestParams.Index) {
     try {
-      return await this.elasticSearchService.index({
-        index: index,
-        body: { id: data.id, data },
-      });
+      return await this.elasticSearchService.index(params);
     } catch (error) {
       throw error;
     }

@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import logger from '@utils/logger';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { AuthService } from './auth.service';
-import { STRATEGY_JWT_ACCESS } from './constants/strategy.constant';
-import { IJwtPayload } from './interfaces/jwt-payload.interface';
+import { AuthService } from '../auth.service';
+import { STRATEGY_JWT_ACCESS } from '../constants/strategy.constant';
+import { IJwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, STRATEGY_JWT_ACCESS) {

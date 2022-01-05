@@ -5,9 +5,9 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import logger from '@utils/logger';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { AuthService } from './auth.service';
-import { STRATEGY_JWT_CONFIRM } from './constants/strategy.constant';
-import { IEmailConfirmPayload } from './interfaces/emailConfirm-payload.interface';
+import { AuthService } from '../auth.service';
+import { STRATEGY_JWT_CONFIRM } from '../constants/strategy.constant';
+import { IEmailConfirmPayload } from '../interfaces/emailConfirm-payload.interface';
 
 @Injectable()
 export class JwtConfirmTokenStrategy extends PassportStrategy(Strategy, STRATEGY_JWT_CONFIRM) {

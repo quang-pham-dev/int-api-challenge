@@ -29,7 +29,7 @@ export class AuthController {
 
   // # signup
   @Post('signup')
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'User registration API',
   })
