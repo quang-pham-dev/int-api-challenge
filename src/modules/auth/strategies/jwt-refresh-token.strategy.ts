@@ -1,5 +1,6 @@
+import { JWT_REFRESH_TOKEN_SECRET } from '@constants/jwt.constant';
 import { UsersService } from '@modules/users/users.service';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import logger from '@utils/logger';
@@ -21,7 +22,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, STRATEGY
           return refreshToken;
         },
       ]),
-      secretOrKey: configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+      secretOrKey: configService.get<string>(JWT_REFRESH_TOKEN_SECRET),
       ignoreExpiration: false,
       passReqToCallback: true,
     });
@@ -29,6 +30,11 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, STRATEGY
   async validate(req: Request, payload: IJwtPayload) {
     logger.info(`${this.validate.name} jwt-refresh was called`);
     const refreshToken = req.headers.authorization.replace('Bearer ', '');
-    return this.userService.getUserIfRefreshTokenMatches(refreshToken, payload.id);
+    if (payload.id && refreshToken) {
+      return this.userService.getUserIfRefreshTokenMatches(refreshToken, payload.id);
+    }
+    throw new BadRequestException(
+      `Bad request please check: refreshToken is ${refreshToken} or id is ${payload.id}`,
+    );
   }
 }

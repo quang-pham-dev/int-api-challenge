@@ -1,3 +1,4 @@
+import { JWT_VERIFICATION_TOKEN_SECRET } from '@constants/jwt.constant';
 import { HttpUnauthorizedError } from '@errors/unauthorized.error';
 import { User } from '@modules/users/models/user.model';
 import { BadRequestException, Injectable } from '@nestjs/common';
@@ -17,7 +18,7 @@ export class JwtConfirmTokenStrategy extends PassportStrategy(Strategy, STRATEGY
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
+      secretOrKey: configService.get(JWT_VERIFICATION_TOKEN_SECRET),
       ignoreExpiration: false,
     });
   }

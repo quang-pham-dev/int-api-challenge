@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import * as bcrypt from 'bcrypt';
 import { uuid_v4 } from '@utils/uuid.util';
@@ -57,6 +62,9 @@ export class UsersService {
     const foundUser = await this.userModel.findOne({ id }).exec();
     if (!foundUser) {
       throw new NotFoundException('User with this id does not exist');
+    }
+    if (!foundUser.currentHashedRefreshToken) {
+      throw new BadRequestException('Please login!!!');
     }
     try {
       const isRefreshTokenMatching = await bcrypt.compare(

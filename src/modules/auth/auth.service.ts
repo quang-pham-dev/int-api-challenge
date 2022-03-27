@@ -1,3 +1,9 @@
+import {
+  JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+  JWT_ACCESS_TOKEN_SECRET,
+  JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+  JWT_REFRESH_TOKEN_SECRET,
+} from '@constants/jwt.constant';
 import { USER_EXISTING_ERROR } from '@constants/errors.constant';
 import {
   BadRequestException,
@@ -60,21 +66,21 @@ export class AuthService {
     const payload: IJwtPayload = { id };
 
     return this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
-      expiresIn: `${this.configService.get<string>('JWT_ACCESS_TOKEN_EXPIRATION_TIME')}s`,
+      secret: this.configService.get<string>(JWT_ACCESS_TOKEN_SECRET),
+      expiresIn: `${this.configService.get<string>(JWT_ACCESS_TOKEN_EXPIRATION_TIME)}s`,
     });
   }
   private generateRefreshToken(id: string): string {
     const payload: IJwtPayload = { id };
 
     return this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: `${this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRATION_TIME')}s`,
+      secret: this.configService.get<string>(JWT_REFRESH_TOKEN_SECRET),
+      expiresIn: `${this.configService.get<string>(JWT_REFRESH_TOKEN_EXPIRATION_TIME)}s`,
     });
   }
 
   async setCurrentRefreshToken(refreshToken: string, id: string) {
-    return this.usersService.hashCurrentRefreshToken(refreshToken, id);
+    return await this.usersService.hashCurrentRefreshToken(refreshToken, id);
   }
 
   async verifyPayload(payload: IJwtPayload): Promise<User> {

@@ -61,6 +61,8 @@ export class AuthController {
     const { accessToken, refreshToken } = await this.authService.signIn(req.user);
     // TODO: set current refresh token by user ID
     await this.authService.setCurrentRefreshToken(refreshToken, user.id);
+    // TODO: set refreshToken by header to cookie.
+
     return { user, accessToken, refreshToken };
   }
 

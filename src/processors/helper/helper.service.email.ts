@@ -7,6 +7,11 @@ import * as Mail from 'nodemailer/lib/mailer';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '@modules/users/users.service';
+import {
+  EMAIL_CONFIRMATION_URL,
+  JWT_VERIFICATION_TOKEN_EXPIRATION_TIME,
+  JWT_VERIFICATION_TOKEN_SECRET,
+} from '@constants/jwt.constant';
 
 export interface IEmailOptions {
   to: string;
@@ -76,7 +81,7 @@ export class EmailService {
   public async decodeConfirmationToken(token: string): Promise<string> {
     try {
       const payload = await this.jwtService.verify(token, {
-        secret: this.configService.get<string>('JWT_VERIFICATION_TOKEN_SECRET'),
+        secret: this.configService.get<string>(JWT_VERIFICATION_TOKEN_SECRET),
       });
       if (typeof payload === 'object' && 'emailAddress' in payload) {
         return payload.emailAddress;
@@ -102,10 +107,10 @@ export class EmailService {
     const payload = { emailAddress };
 
     const confirmToken = this.jwtService.sign(payload, {
-      secret: this.configService.get<string>('JWT_VERIFICATION_TOKEN_SECRET'),
-      expiresIn: `${this.configService.get<number>('JWT_VERIFICATION_TOKEN_EXPIRATION_TIME')}s`,
+      secret: this.configService.get<string>(JWT_VERIFICATION_TOKEN_SECRET),
+      expiresIn: `${this.configService.get<number>(JWT_VERIFICATION_TOKEN_EXPIRATION_TIME)}s`,
     });
-    const url = `${this.configService.get('EMAIL_CONFIRMATION_URL')}?token=${confirmToken}`;
+    const url = `${this.configService.get(EMAIL_CONFIRMATION_URL)}?token=${confirmToken}`;
 
     const content = `<h3>Please click below to confirm your email</h3>
                     <p><a href="${url}">Confirm</a></p>
