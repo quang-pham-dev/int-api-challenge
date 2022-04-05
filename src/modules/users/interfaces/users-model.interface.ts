@@ -3,8 +3,6 @@ export interface IUserModel {
 
   lastName: string;
 
-  sex: string;
-
   emailAddress: string;
 
   password: string;

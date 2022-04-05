@@ -16,8 +16,9 @@ import {
 export interface IEmailOptions {
   to: string;
   subject: string;
-  text: string;
+  text?: string;
   html: string;
+  from?: string;
 }
 
 @Injectable()
@@ -103,7 +104,7 @@ export class EmailService {
     this.sendVerificationLink(user.emailAddress);
   }
 
-  public sendVerificationLink(emailAddress: string) {
+  public async sendVerificationLink(emailAddress: string) {
     const payload = { emailAddress };
 
     const confirmToken = this.jwtService.sign(payload, {
@@ -113,14 +114,14 @@ export class EmailService {
     const url = `${this.configService.get(EMAIL_CONFIRMATION_URL)}?token=${confirmToken}`;
 
     const content = `<h3>Please click below to confirm your email</h3>
-                    <p><a href="${url}">Confirm</a></p>
-                    <strong>If you not request this email you can safely ignore it</strong>`;
+                     <p><a href="${url}">Confirm</a></p>
+                     <strong>If you not request this email you can safely ignore it</strong>`;
     return (
       this.sendMail({
+        from: `"No reply" <william.pham@email.com>`,
         to: emailAddress,
         subject: '✔ Welcome! - Thank you for your registration',
         html: content,
-        text: '"No reply" <api@email.com>',
       }),
       confirmToken
     );

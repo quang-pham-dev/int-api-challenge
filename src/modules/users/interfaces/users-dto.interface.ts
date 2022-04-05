@@ -3,8 +3,6 @@ export interface IUserDto {
 
   lastName: string;
 
-  sex: string;
-
   emailAddress: string;
 
   password: string;

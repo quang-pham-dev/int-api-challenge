@@ -23,6 +23,7 @@
       "@config/*": ["config/*"],
       "@constants/*": ["constants/*"],
       "@interfaces/*": ["interfaces/*"],
+      "@middleware/*": ["middleware/*"],
       "@environments/*": ["environments/*"],
       "@modules/*": ["modules/*"],
       "@errors/*": ["errors/*"],

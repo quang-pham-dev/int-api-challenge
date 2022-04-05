@@ -18,18 +18,19 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, STRATEGY
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         (request: Request) => {
-          const refreshToken = request.headers.authorization.replace('Bearer ', '');
+          const refreshToken = request.headers?.authorization?.replace('Bearer ', '');
+          console.log(refreshToken);
           return refreshToken;
         },
       ]),
       secretOrKey: configService.get<string>(JWT_REFRESH_TOKEN_SECRET),
-      ignoreExpiration: false,
       passReqToCallback: true,
     });
   }
   async validate(req: Request, payload: IJwtPayload) {
     logger.info(`${this.validate.name} jwt-refresh was called`);
-    const refreshToken = req.headers.authorization.replace('Bearer ', '');
+    const refreshToken = req.headers?.authorization?.replace('Bearer ', '').trim();
+    console.log(refreshToken);
     if (payload.id && refreshToken) {
       return this.userService.getUserIfRefreshTokenMatches(refreshToken, payload.id);
     }

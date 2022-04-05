@@ -25,6 +25,12 @@ async function bootstrap() {
 
   // # Application Settings
 
+  // # CORS
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   app.use(requestIp.mw());
   app.use(cookieParser());
 

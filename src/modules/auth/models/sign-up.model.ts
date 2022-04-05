@@ -20,9 +20,6 @@ export class Auth implements ISignUp, IBaseModel {
   @prop({ trim: true })
   lastName: string;
 
-  @prop({ trim: true })
-  sex: string;
-
   @prop({ required: true, trim: true })
   emailAddress: string;
 
@@ -51,11 +48,11 @@ export class Auth implements ISignUp, IBaseModel {
   currentHashedRefreshToken?: string;
 
   @prop({ default: Date })
-  createdAt: Date;
+  createdAt: string;
 
   @prop({ default: Date })
-  updatedAt: Date;
+  updatedAt: string;
 
   @prop({ default: Date })
-  deletedAt: Date;
+  deletedAt: string;
 }

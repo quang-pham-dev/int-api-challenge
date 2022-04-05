@@ -4,23 +4,26 @@ import {
   JWT_REFRESH_TOKEN_EXPIRATION_TIME,
   JWT_REFRESH_TOKEN_SECRET,
 } from '@constants/jwt.constant';
-import { USER_EXISTING_ERROR } from '@constants/errors.constant';
+import { USER_EXISTING_ERROR, USER_WRONG_CREDENTIALS_ERROR } from '@constants/errors.constant';
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { EmailService } from '@processors/helper/helper.service.email';
-import { logger } from '@typegoose/typegoose/lib/logSettings';
-import { hashPassword, verifyPassword } from '@utils/hash.util';
 import { User } from 'modules/users/models/user.model';
 import { UsersService } from 'modules/users/users.service';
 import { SignUpDto } from './dtos/signup.dto';
 import { IEmailConfirmPayload } from './interfaces/emailConfirm-payload.interface';
 import { IJwtPayload } from './interfaces/jwt-payload.interface';
+import { hashPassword } from '@utils/hash.util';
+import logger from '@utils/logger';
 
 @Injectable()
 export class AuthService {
@@ -42,7 +45,7 @@ export class AuthService {
       ...signUpDto,
       password: await hashPassword(signUpDto.password),
     });
-    return { newUser, token: confirmToken };
+    return { user: newUser, token: confirmToken };
   }
 
   async signIn(user: User) {
@@ -75,7 +78,7 @@ export class AuthService {
 
     return this.jwtService.sign(payload, {
       secret: this.configService.get<string>(JWT_REFRESH_TOKEN_SECRET),
-      expiresIn: `${this.configService.get<string>(JWT_REFRESH_TOKEN_EXPIRATION_TIME)}s`,
+      expiresIn: `${this.configService.get<string>(JWT_REFRESH_TOKEN_EXPIRATION_TIME)}d`,
     });
   }
 
@@ -104,22 +107,26 @@ export class AuthService {
     try {
       if (!user) {
         throw new UnauthorizedException(
-          `Provided credentials are invalid! please recheck email: ${emailAddress}, password: ${plainTextPassword}`,
+          `Provided credentials are invalid! please recheck email and password`,
         );
       }
 
       if (!user.isEmailConfirmed) {
-        throw new UnauthorizedException(
-          `Pending account. Please verify your email: ${user.emailAddress}`,
-        );
+        throw new UnauthorizedException(`Pending account. Please Confirm your email.`);
       }
 
-      await verifyPassword(plainTextPassword, user.password);
+      await this.verifyPassword(plainTextPassword, user.password);
 
       return user;
     } catch (error) {
       logger.error('error', error);
       throw error;
+    }
+  }
+  private async verifyPassword(plainTextPassword: string, hashedPassword: string) {
+    const isPasswordMatching = await bcrypt.compare(plainTextPassword, hashedPassword);
+    if (!isPasswordMatching) {
+      throw new HttpException(USER_WRONG_CREDENTIALS_ERROR, HttpStatus.BAD_REQUEST);
     }
   }
 }

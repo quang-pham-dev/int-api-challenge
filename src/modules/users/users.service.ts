@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { ReturnModelType } from '@typegoose/typegoose';
 import * as bcrypt from 'bcrypt';
-import { uuid_v4 } from '@utils/uuid.util';
 import { InjectModel } from 'nestjs-typegoose';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './models/user.model';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class UsersService {
@@ -18,7 +18,7 @@ export class UsersService {
   async createNewUser(newUser: CreateUserDto) {
     try {
       const userCreated = await this.userModel.create({
-        id: uuid_v4(),
+        id: nanoid(24),
         ...newUser,
       });
       return userCreated;

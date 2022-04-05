@@ -26,10 +26,6 @@ export class CreateUserDto implements IUserDto {
   @MaxLength(50)
   readonly lastName: string;
 
-  @ApiProperty({ description: 'The sex of the User' })
-  @MinLength(4)
-  readonly sex: string;
-
   @ApiProperty({ description: 'The password of the User' })
   @IsString()
   @IsNotEmpty()

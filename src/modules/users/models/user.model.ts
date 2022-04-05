@@ -23,10 +23,6 @@ export class User implements IUserModel, IBaseModel {
   @prop({ trim: true })
   lastName: string;
 
-  @ApiProperty({ example: 'Male', description: 'sex of User' })
-  @prop({ trim: true })
-  sex: string;
-
   @ApiProperty({ example: 'quangpn1@email', description: 'email address' })
   @prop({ required: true, trim: true })
   emailAddress: string;
@@ -49,11 +45,11 @@ export class User implements IUserModel, IBaseModel {
   currentHashedRefreshToken?: string;
 
   @prop({ default: Date })
-  createdAt: Date;
+  createdAt: string;
 
   @prop({ default: Date })
-  updatedAt: Date;
+  updatedAt: string;
 
   @prop({ default: Date })
-  deletedAt: Date;
+  deletedAt: string;
 }

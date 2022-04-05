@@ -3,8 +3,6 @@ export interface ICredential {
 
   lastName: string;
 
-  sex: string;
-
   emailAddress: string;
 
   password: string;

@@ -1,16 +1,18 @@
-import { VALIDATION_SCHEMA } from '@config/app.config';
-import { ArticleModule } from '@modules/article/article.module';
-import { AuthModule } from '@modules/auth/auth.module';
-import { SearchModule } from '@modules/search/search.module';
-import { UsersModule } from '@modules/users/users.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { HelperModule } from '@processors/helper/helper.module';
-import { CorsMiddleware } from 'middlewares/cors.middleware';
-import { OriginMiddleware } from 'middlewares/origin.middleware';
+
 import { TypegooseModule } from 'nestjs-typegoose';
+
+import { VALIDATION_SCHEMA } from '@config/app.config';
+import { AuthModule } from '@modules/auth/auth.module';
+import { GoalsModule } from '@modules/goals/goals.module';
+import { SearchModule } from '@modules/search/search.module';
+import { UsersModule } from '@modules/users/users.module';
+import { HelperModule } from '@processors/helper/helper.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { CorsMiddleware } from 'middleware/cors.middleware';
+import { OriginMiddleware } from 'middleware/origin.middleware';
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { AppService } from './app.service';
     //#Feature modules
     AuthModule,
     UsersModule,
-    ArticleModule,
+    GoalsModule,
     SearchModule,
   ],
   controllers: [AppController],

@@ -28,7 +28,7 @@ export class AuthController {
   ) {}
 
   // # signup
-  @Post('signup')
+  @Post('signUp')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'User registration API',
@@ -45,7 +45,7 @@ export class AuthController {
   }
 
   // # signin
-  @Post('signin')
+  @Post('signIn')
   @UseGuards(LocalAuthenticationGuard)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -61,24 +61,23 @@ export class AuthController {
     const { accessToken, refreshToken } = await this.authService.signIn(req.user);
     // TODO: set current refresh token by user ID
     await this.authService.setCurrentRefreshToken(refreshToken, user.id);
-    // TODO: set refreshToken by header to cookie.
 
     return { user, accessToken, refreshToken };
   }
 
   //   # Logout
-  @Post('signout')
+  @Post('signOut')
   @UseGuards(JwtAccessTokenGuard)
   @HttpCode(200)
   async logOut(@Req() request: RequestWithUser) {
     await this.authService.signOut(request.user);
+    return { status: 200, message: 'success' };
   }
 
   // # Refresh token
-  @Get('renewal')
+  @Post('renewal')
   @UseGuards(JwtRefreshTokenGuard)
   async refresh(@Req() req: RequestWithUser) {
-    // const { user } = req;
     const accessToken = await this.authService.renewal(req.user);
 
     return accessToken;

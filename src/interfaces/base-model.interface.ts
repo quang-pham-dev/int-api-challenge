@@ -1,9 +1,9 @@
 export interface IBaseModel {
   id: string;
 
-  createdAt: Date;
+  createdAt: string;
 
-  updatedAt: Date;
+  updatedAt: string;
 
-  deletedAt: Date;
+  deletedAt: string;
 }
