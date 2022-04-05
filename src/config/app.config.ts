@@ -7,7 +7,7 @@ const ROOT_PATH = path.join(__dirname, '..');
 
 export const APP = {
   PORT: 8080,
-  MASTER: 'QuangPN',
+  MASTER: 'william',
   NAME: 'api.application.com',
   URL: 'https://application.com',
   ROOT_PATH,
